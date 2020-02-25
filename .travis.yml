@@ -33,10 +33,6 @@ env:
 
 install: true
 
-before_script:
-  - sudo apt-get install nodejs
-  - make ng_install
-
 # Fix this by renaming the directory before testing.
 # https://github.com/travis-ci/travis-ci/issues/4573
 script:
@@ -44,9 +40,9 @@ script:
   - export PATH="$PATH:$GOBIN"
   # Fix dir names
   - cd $GOPATH/src/github.com/
-  - mv Clivern/Beetle Clivern/beetle
+  - mv Clivern/Apes Clivern/apes
   - mv Clivern clivern
-  - cd clivern/beetle
+  - cd clivern/apes
   # Config & execute ci tasks
   - make install_revive
   - make ci
