@@ -1,5 +1,5 @@
 <p align="center">
-    <img alt="Apes Logo" src="https://raw.githubusercontent.com/clivern/Apes/master/assets/img/gropher.png?v=1.0.1" width="150" />
+    <img alt="Apes Logo" src="https://raw.githubusercontent.com/Clivern/Apes/master/assets/img/gopher.png?v=1.0.1" width="150" />
     <h3 align="center">Apes</h3>
     <p align="center">Chaos and Resiliency Testing Service.</p>
     <p align="center">
