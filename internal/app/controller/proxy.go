@@ -5,53 +5,25 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
 
-	"github.com/clivern/apes/internal/app/module"
-
-	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
-	"go.uber.org/zap"
+	"github.com/gorilla/mux"
 )
 
-// Proxy controller
-func Proxy(c *gin.Context) {
-	path := c.Param("path")
-	target := "https://httpbin.org/status/200"
+func Proxy() func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		target := "https://httpbin.org"
+		remote, err := url.Parse(target)
 
-	logger, _ := module.NewLogger(
-		viper.GetString("log.level"),
-		viper.GetString("log.format"),
-		[]string{viper.GetString("log.output")},
-	)
+		if err != nil {
+			panic(err)
+		}
 
-	defer func() {
-		_ = logger.Sync()
-	}()
+		proxy := httputil.NewSingleHostReverseProxy(remote)
 
-	url, err := url.Parse(target)
-
-	if err != nil {
-		logger.Error(fmt.Sprintf(
-			`Error: %s`,
-			err.Error(),
-		), zap.String("CorrelationId", c.Request.Header.Get("X-Correlation-ID")))
-
-		c.Status(http.StatusInternalServerError)
-		return
+		r.URL.Path = mux.Vars(r)["path"]
+		proxy.ServeHTTP(w, r)
 	}
-
-	logger.Info(fmt.Sprintf(
-		`Proxy %s -> %s`,
-		path,
-		target,
-	), zap.String("CorrelationId", c.Request.Header.Get("X-Correlation-ID")))
-
-	proxy := httputil.NewSingleHostReverseProxy(url)
-
-	//c.Request.Host = url.Host
-	proxy.ServeHTTP(c.Writer, c.Request)
 }

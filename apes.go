@@ -8,7 +8,6 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -16,11 +15,10 @@ import (
 	"strconv"
 
 	"github.com/clivern/apes/internal/app/controller"
-	"github.com/clivern/apes/internal/app/middleware"
 	"github.com/clivern/apes/internal/app/module"
 
 	"github.com/drone/envsubst"
-	"github.com/gin-gonic/gin"
+	"github.com/gorilla/mux"
 	"github.com/spf13/viper"
 )
 
@@ -112,46 +110,8 @@ func main() {
 		}
 	}
 
-	if viper.GetString("log.output") == "stdout" {
-		gin.DefaultWriter = os.Stdout
-	} else {
-		f, _ := os.Create(viper.GetString("log.output"))
-		gin.DefaultWriter = io.MultiWriter(f)
-	}
-
-	if viper.GetString("app.mode") == "prod" {
-		gin.SetMode(gin.ReleaseMode)
-		gin.DefaultWriter = ioutil.Discard
-		gin.DisableConsoleColor()
-	}
-
-	r := gin.Default()
-
-	r.Use(middleware.Correlation())
-	r.Use(middleware.Logger())
-
-	r.GET("/favicon.ico", func(c *gin.Context) {
-		c.String(http.StatusNoContent, "")
-	})
-
-	r.GET("/_health", controller.HealthCheck)
-	r.Any("/p/*path", controller.Proxy)
-
-	var runerr error
-
-	if viper.GetBool("app.tls.status") {
-		runerr = r.RunTLS(
-			fmt.Sprintf(":%s", strconv.Itoa(viper.GetInt("app.port"))),
-			viper.GetString("app.tls.pemPath"),
-			viper.GetString("app.tls.keyPath"),
-		)
-	} else {
-		runerr = r.Run(
-			fmt.Sprintf(":%s", strconv.Itoa(viper.GetInt("app.port"))),
-		)
-	}
-
-	if runerr != nil {
-		panic(runerr.Error())
-	}
+	r := mux.NewRouter()
+	r.HandleFunc("/f/{path:.*}", controller.Proxy())
+	http.Handle("/", r)
+	http.ListenAndServe(fmt.Sprintf(":%s", strconv.Itoa(viper.GetInt("app.port"))), r)
 }
