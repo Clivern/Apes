@@ -1,0 +1,28 @@
+# App configs
+app:
+    # Env mode (dev or prod)
+    mode: ${APES_APP_MODE:-test}
+    # HTTP port
+    port: ${APES_API_PORT:-8080}
+    # App URL
+    domain: ${APES_APP_DOMAIN:-http://127.0.0.1:8080}
+    # TLS configs
+    tls:
+        status: ${APES_API_TLS_STATUS:-off}
+        pemPath: ${APES_API_TLS_PEMPATH:-cert/server.pem}
+        keyPath: ${APES_API_TLS_KEYPATH:-cert/server.key}
+
+    # URLs & Paths for Proxy
+    proxy:
+        -
+            path: /proxy/api/cloud
+            url: https://httpbin.org/status/200
+
+# Log configs
+log:
+    # Log level, it can be debug, info, warn, error, panic, fatal
+    level: ${APES_LOG_LEVEL:-info}
+    # output can be stdout or abs path to log file /var/logs/apes.log
+    output: ${APES_LOG_OUTPUT:-stdout}
+    # Format can be json
+    format: ${APES_LOG_FORMAT:-json}
