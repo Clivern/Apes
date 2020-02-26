@@ -18,7 +18,7 @@
 Get latest binary.
 
 ```zsh
-$ curl -sL https://github.com/Clivern/Beetle/releases/download/x.x.x/beetle_x.x.x_OS.tar.gz | tar xz
+$ curl -sL https://github.com/Clivern/Apes/releases/download/x.x.x/apes_x.x.x_OS.tar.gz | tar xz
 ```
 
 Run Apes Chaos Reverse Proxy.
