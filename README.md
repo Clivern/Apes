@@ -23,7 +23,7 @@ $ curl -sL https://github.com/Clivern/Beetle/releases/download/x.x.x/beetle_x.x.
 
 Run Apes Chaos Reverse Proxy.
 
-````zsh
+```zsh
 $ ./apes --port=8080 --upstream=https://httpbin.org --failRate=10% --latency=0s
 ```
 
