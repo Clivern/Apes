@@ -3,7 +3,7 @@
     <h3 align="center">Apes</h3>
     <p align="center">Chaos and Resiliency Testing Service.</p>
     <p align="center">
-        <a href="https://travis-ci.org/Clivern/Apes"><img src="https://travis-ci.org/Clivern/Apes.svg?branch=master"></a>
+        <a href="https://travis-ci.com/Clivern/Apes"><img src="https://travis-ci.com/Clivern/Apes.svg?branch=master"></a>
         <a href="https://github.com/Clivern/Apes/releases"><img src="https://img.shields.io/badge/Version-0.0.1-red.svg"></a>
         <a href="https://goreportcard.com/report/github.com/Clivern/Apes"><img src="https://goreportcard.com/badge/github.com/clivern/Apes?v=0.0.1"></a>
         <a href="https://github.com/Clivern/Apes/blob/master/LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-orange.svg"></a>
