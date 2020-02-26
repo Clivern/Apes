@@ -9,18 +9,34 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"strconv"
+	"strings"
+	"time"
 
 	"github.com/gorilla/mux"
 )
 
 // Proxy controller
-func Proxy(upstream string, _ string, _ string) func(http.ResponseWriter, *http.Request) {
+func Proxy(upstream string, _ string, latency string) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		remote, err := url.Parse(upstream)
 
 		if err != nil {
 			log.Fatalf("Unexpected Error: %s", err.Error())
 		}
+
+		log.Printf(
+			"Incoming request to Proxy %s to %s%s",
+			r.URL.Path,
+			upstream,
+			r.URL.Path,
+		)
+
+		latencySeconds, _ := strconv.Atoi(strings.ReplaceAll(latency, "s", ""))
+
+		log.Printf("Hold on for %s", latency)
+
+		time.Sleep(time.Duration(latencySeconds) * time.Second)
 
 		log.Printf(
 			"Proxy %s to %s%s",

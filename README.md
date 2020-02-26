@@ -1,10 +1,10 @@
 <p align="center">
-    <img alt="Apes Logo" src="https://raw.githubusercontent.com/Clivern/Apes/master/assets/img/gopher.png?v=1.0.1" width="150" />
+    <img alt="Apes Logo" src="https://raw.githubusercontent.com/Clivern/Apes/master/assets/img/gopher.png?v=0.0.2" width="150" />
     <h3 align="center">Apes</h3>
     <p align="center">Chaos and Resiliency Testing Service.</p>
     <p align="center">
         <a href="https://travis-ci.com/Clivern/Apes"><img src="https://travis-ci.com/Clivern/Apes.svg?branch=master"></a>
-        <a href="https://github.com/Clivern/Apes/releases"><img src="https://img.shields.io/badge/Version-0.0.1-red.svg"></a>
+        <a href="https://github.com/Clivern/Apes/releases"><img src="https://img.shields.io/badge/Version-0.0.2-red.svg"></a>
         <a href="https://goreportcard.com/report/github.com/Clivern/Apes"><img src="https://goreportcard.com/badge/github.com/clivern/Apes?v=0.0.1"></a>
         <a href="https://github.com/Clivern/Apes/blob/master/LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-orange.svg"></a>
     </p>
@@ -15,25 +15,25 @@
 
 ### Usage
 
-Get latest binary.
+Get [the latest binary.](https://github.com/Clivern/Apes/releases)
 
 ```zsh
-$ curl -sL https://github.com/Clivern/Apes/releases/download/x.x.x/apes_x.x.x_OS.tar.gz | tar xz
+$ curl -sL https://github.com/Clivern/Apes/releases/download/x.x.x/Apes_x.x.x_OS_x86_64.tar.gz | tar xz
 ```
 
 Run Apes Chaos Reverse Proxy.
 
 ```zsh
-$ ./apes --port=8080 --upstream=https://httpbin.org --failRate=10% --latency=0s
+$ ./Apes --port=8080 --upstream=https://httpbin.org --failRate=10% --latency=0s
 ```
 
 Check the release.
 
 ```zsh
-$ ./apes --get=release
+$ ./Apes --get=release
 ```
 
-Test it
+Test it.
 
 ```zsh
 $ curl http://127.0.0.1:8080/ip
