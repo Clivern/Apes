@@ -5,6 +5,7 @@
 package controller
 
 import (
+	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -12,14 +13,21 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func Proxy() func(http.ResponseWriter, *http.Request) {
+// Proxy controller
+func Proxy(upstream string, _ string, _ string) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		target := "https://httpbin.org"
-		remote, err := url.Parse(target)
+		remote, err := url.Parse(upstream)
 
 		if err != nil {
-			panic(err)
+			log.Fatalf("Unexpected Error: %s", err.Error())
 		}
+
+		log.Printf(
+			"Proxy %s to %s%s",
+			r.URL.Path,
+			upstream,
+			r.URL.Path,
+		)
 
 		proxy := httputil.NewSingleHostReverseProxy(remote)
 

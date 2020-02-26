@@ -6,13 +6,38 @@
         <a href="https://travis-ci.org/Clivern/Apes"><img src="https://travis-ci.org/Clivern/Apes.svg?branch=master"></a>
         <a href="https://github.com/Clivern/Apes/releases"><img src="https://img.shields.io/badge/Version-0.0.1-red.svg"></a>
         <a href="https://goreportcard.com/report/github.com/Clivern/Apes"><img src="https://goreportcard.com/badge/github.com/clivern/Apes?v=0.0.1"></a>
-     <a href="https://hub.docker.com/r/clivern/apes"><img src="https://img.shields.io/badge/Docker-Latest-orange"></a>
         <a href="https://github.com/Clivern/Apes/blob/master/LICENSE"><img src="https://img.shields.io/badge/LICENSE-MIT-orange.svg"></a>
     </p>
 </p>
 
 
 ## Documentation
+
+### Usage
+
+Get latest binary.
+
+```zsh
+$ curl -sL https://github.com/Clivern/Beetle/releases/download/x.x.x/beetle_x.x.x_OS.tar.gz | tar xz
+```
+
+Run Apes Chaos Reverse Proxy.
+
+````zsh
+$ ./apes --port=8080 --upstream=https://httpbin.org --failRate=10% --latency=0s
+```
+
+Check the release.
+
+```zsh
+$ ./apes --get=release
+```
+
+Test it
+
+```zsh
+$ curl http://127.0.0.1:8080/ip
+```
 
 
 ## Versioning

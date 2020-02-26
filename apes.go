@@ -5,21 +5,14 @@
 package main
 
 import (
-	"bytes"
 	"flag"
 	"fmt"
-	"io/ioutil"
+	"log"
 	"net/http"
-	"os"
-	"path/filepath"
-	"strconv"
 
 	"github.com/clivern/apes/internal/app/controller"
-	"github.com/clivern/apes/internal/app/module"
 
-	"github.com/drone/envsubst"
 	"github.com/gorilla/mux"
-	"github.com/spf13/viper"
 )
 
 var (
@@ -29,10 +22,16 @@ var (
 )
 
 func main() {
-	var configFile string
 	var get string
+	var port int
+	var upstream string
+	var failRate string
+	var latency string
 
-	flag.StringVar(&configFile, "config", "config.prod.yml", "config")
+	flag.IntVar(&port, "port", 8080, "port")
+	flag.StringVar(&upstream, "upstream", "https://httpbin.org", "upstream")
+	flag.StringVar(&failRate, "failRate", "10%", "failRate")
+	flag.StringVar(&latency, "latency", "0s", "latency")
 	flag.StringVar(&get, "get", "", "get")
 	flag.Parse()
 
@@ -48,70 +47,16 @@ func main() {
 		return
 	}
 
-	if get == "health" {
-		return
-	}
-
-	configUnparsed, err := ioutil.ReadFile(configFile)
-
-	if err != nil {
-		panic(fmt.Sprintf(
-			"Error while reading config file [%s]: %s",
-			configFile,
-			err.Error(),
-		))
-	}
-
-	configParsed, err := envsubst.EvalEnv(string(configUnparsed))
-
-	if err != nil {
-		panic(fmt.Sprintf(
-			"Error while parsing config file [%s]: %s",
-			configFile,
-			err.Error(),
-		))
-	}
-
-	viper.SetConfigType("yaml")
-	err = viper.ReadConfig(bytes.NewBuffer([]byte(configParsed)))
-
-	if err != nil {
-		panic(fmt.Sprintf(
-			"Error while loading configs [%s]: %s",
-			configFile,
-			err.Error(),
-		))
-	}
-
-	if viper.GetString("log.output") != "stdout" {
-		fs := module.FileSystem{}
-		dir, _ := filepath.Split(viper.GetString("log.output"))
-
-		if !fs.DirExists(dir) {
-			if _, err := fs.EnsureDir(dir, 777); err != nil {
-				panic(fmt.Sprintf(
-					"Directory [%s] creation failed with error: %s",
-					dir,
-					err.Error(),
-				))
-			}
-		}
-
-		if !fs.FileExists(viper.GetString("log.output")) {
-			f, err := os.Create(viper.GetString("log.output"))
-			if err != nil {
-				panic(fmt.Sprintf(
-					"Error while creating log file [%s]: %s",
-					viper.GetString("log.output"),
-					err.Error(),
-				))
-			}
-			defer f.Close()
-		}
-	}
+	log.Printf(
+		"Starting apes chaos reverse proxy port=%d upstream=%s failRate=%s latency=%s",
+		port,
+		upstream,
+		failRate,
+		latency,
+	)
 
 	r := mux.NewRouter()
-	r.HandleFunc("/f/{path:.*}", controller.Proxy())
+	r.HandleFunc("/{path:.*}", controller.Proxy(upstream, failRate, latency))
 	http.Handle("/", r)
-	http.ListenAndServe(fmt.Sprintf(":%s", strconv.Itoa(viper.GetInt("app.port"))), r)
+	http.ListenAndServe(fmt.Sprintf(":%d", port), r)
 }
