@@ -10,6 +10,7 @@
     </p>
 </p>
 
+Apes can work as a proxy for one of your upstream API services to simulate high latencies and failures to make sure that your services has capability to withstand and recover from failures.
 
 ## Documentation
 
