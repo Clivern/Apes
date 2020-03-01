@@ -34,7 +34,7 @@ func Proxy(upstream string, failRate string, latency string) func(http.ResponseW
 			r.URL.Path,
 		)
 
-		failCount, _ := strconv.Atoi(strings.ReplaceAll(failRate, "%", ""))
+		failCount, _ := strconv.Atoi(strings.Replace(failRate, "%", "", -1))
 
 		if rand.Intn(100) < failCount {
 			log.Printf(
@@ -47,7 +47,7 @@ func Proxy(upstream string, failRate string, latency string) func(http.ResponseW
 			return
 		}
 
-		latencySeconds, _ := strconv.Atoi(strings.ReplaceAll(latency, "s", ""))
+		latencySeconds, _ := strconv.Atoi(strings.Replace(latency, "s", "", -1))
 
 		log.Printf("Hold on for %s", latency)
 
